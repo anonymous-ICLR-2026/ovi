@@ -60,9 +60,14 @@ h1 { margin: 0 0 12px 0; font-size: 24px; }
     <li><strong>Prompt formatting.</strong> For I2V comparisons, we use the original JSON prompt format aligned with the <code>universe_i2v</code> model requirements. For T2V comparisons, we merge the video and audio fields into a single text prompt as required by the <code>javis</code> interface. The same semantic content is used across systems within each modality.</li>
     <li><strong>Qualitative evaluation criteria.</strong> Labelers are presented with a random pair of videos each time, and are asked the three questions below in terms of evaluation criteria. Labelers are asked to select one of the three choices as answer to each question - Left is Better, Right is Better or Cannot Decide. 
       <ol class="sublist" type="a">
-        <li>Audio quality: Based on your assessment of sound clarity, naturalness, and absence of noise or distortion, which clip demonstrates higher overall audio quality?</li>
-        <li>Video quality: Considering factors such as visual clarity, sharpness, motion smoothness, and absence of visual artifacts, which clip demonstrates higher overall video quality?</li>
-        <li>AV sync: Taking into account how accurately the audio aligns with visible speech movements and other relevant visual events, which clip demonstrates better overall audio–video synchrony</li>
+      <li>Audio quality: Based on your assessment of sound clarity, naturalness, and absence of
+      noise or distortion, which clip demonstrates higher overall audio quality?</li>
+      <li>Video quality: Considering factors such as visual clarity, sharpness, motion smoothness,
+      and absence of visual artifacts, which clip demonstrates higher overall video quality?</li>
+      <li>AV sync: Taking into account how accurately the audio aligns with visible speech move-
+      ments and other relevant visual events, as well as how well the audio content semantically
+      matches the actions, mood, or context of the video, which clip demonstrates better overall
+      audio–video alignment?</li>
       </ol>
     </li>
     <li><strong>Summary statement.</strong> Blind voting results from reviewers suggest that <code>ovi</code> performs competitively or favorably on the above criteria with a large margin in both T2V and I2V settings to both Javis and Universe-1 as written in the paper</li>
