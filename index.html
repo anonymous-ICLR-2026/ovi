@@ -1,0 +1,1045 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'/>
+<title>Compare Models (2-wide rows)</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; color:#222; }
+h1 { margin: 0 0 12px 0; font-size: 24px; }
+.header { border: 1px solid #e7e7e7; border-radius: 12px; padding: 16px; background: #fbfbfb; margin-bottom: 20px; }
+.header h2 { margin: 0 0 10px 0; font-size: 18px; }
+.header ol { margin: 8px 0 0 20px; }
+.header li { margin: 6px 0; line-height: 1.4; }
+.header .sublist { margin-top: 6px; }
+.header .note { margin-top: 10px; font-size: 12px; color: #555; }
+.legend { display:flex; gap:12px; margin: 10px 0 18px 0; font-size: 12px; color:#444;}
+.badge { padding: 4px 10px; border-radius: 999px; border: 1px solid #e0e0e0; background: #fff; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 22px; }
+.row { border: 1px solid #e7e7e7; border-radius: 12px; padding: 16px; background: #fafafa; }
+.row h2 { margin: 0 0 12px 0; font-size: 16px; font-weight: 700; color: #333; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: 14px; margin-bottom: 12px; }
+.card { background: white; border: 1px solid #e7e7e7; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.card h3 { margin: 0; font-size: 14px; font-weight: 700; color: #111; letter-spacing: .2px; }
+.card .filename { font-size: 12px; color: #666; word-break: break-all; }
+.card video { width: 100%; height: auto; background: #000; border-radius: 8px; }
+.missing { display: grid; place-items: center; width: 100%; aspect-ratio: 16/9; background: #f0f0f0; color: #888; border-radius: 8px; font-size: 12px; border: 1px dashed #d0d0d0; }
+.footer { margin-top: 24px; font-size: 12px; color: #666; }
+.prompt { border: 1px solid #e7e7e7; background: #fff; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+.prompt h3 { margin: 0 0 6px 0; font-size: 14px; }
+.prompt .kv { margin: 2px 0; font-size: 13px; color: #333; }
+.prompt code { background: #f6f6f6; padding: 1px 6px; border-radius: 4px; }
+@media (min-width: 1200px) {
+  .pair { grid-template-columns: repeat(2, minmax(420px, 1fr)); }
+}
+</style></head><body>
+
+<div class="header">
+  <h1>Ovi vs. Javis and Universe-1 — 205 Evaluation Prompts (only 25 Shown for Visualization) </h1>
+  <h2>Protocol & Viewing Guide</h2>
+  <ol>
+
+  <li><strong>Modality matching for fair comparison.</strong>
+  Ovi is capable of both <em>text-to-video (T2V)</em> and <em>image-to-video (I2V)</em> generation, 
+  while Javis supports only T2V and Universe-1 supports only I2V.  
+  For a fair comparison, we evaluate Ovi in both modes:
+  <ul>
+    <li><strong>T2V comparison:</strong> Ovi (T2V) vs Javis</li>
+    <li><strong>I2V comparison:</strong> Ovi (I2V) vs Universe-1</li>
+  </ul>
+  This ensures that each baseline is compared to Ovi under the same input modality.
+  </li>
+
+  <li><strong>Organization of examples.</strong>
+  Each group represents one evaluation prompt (JSON).  
+  For each prompt:
+  <ul>
+    <li><strong>Row 1:</strong> Javis vs Ovi (T2V)</li>
+    <li><strong>Row 2:</strong> Universe-1 vs Ovi (I2V)</li>
+  </ul>
+  </li>
+
+    <li><strong>Prompt formatting.</strong> For I2V comparisons, we use the original JSON prompt format aligned with the <code>universe_i2v</code> model requirements. For T2V comparisons, we merge the video and audio fields into a single text prompt as required by the <code>javis</code> interface. The same semantic content is used across systems within each modality.</li>
+    <li><strong>Qualitative evaluation criteria.</strong> Labelers are presented with a random pair of videos each time, and are asked the three questions below in terms of evaluation criteria. Labelers are asked to select one of the three choices as answer to each question - Left is Better, Right is Better or Cannot Decide. 
+      <ol class="sublist" type="a">
+      <li>Audio quality: Based on your assessment of sound clarity, naturalness, and absence of
+      noise or distortion, which clip demonstrates higher overall audio quality?</li>
+      <li>Video quality: Considering factors such as visual clarity, sharpness, motion smoothness,
+      and absence of visual artifacts, which clip demonstrates higher overall video quality?</li>
+      <li>AV sync: Taking into account how accurately the audio aligns with visible speech move-
+      ments and other relevant visual events, as well as how well the audio content semantically
+      matches the actions, mood, or context of the video, which clip demonstrates better overall
+      audio–video alignment?</li>
+      </ol>
+    </li>
+    <li><strong>Summary statement.</strong> Blind voting results from reviewers suggest that <code>ovi</code> performs competitively or favorably on the above criteria with a large margin in both T2V and I2V settings to both Javis and Universe-1 as written in the paper</li>
+  </ol>
+  <div class="note">
+    Each group is labeled with its JSON id (e.g., <code>0000.json</code>) so reviewers can cross-reference the exact prompt used for generation. This page shows a randomly selected subset (up to 25 groups) due to size limits.
+  </div>
+</div>
+
+<div class="grid">
+<div class='prompt'>
+<h3>0008.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> A little boy is playing the keyboard fluently and happily in a simple room. The camera remains stationary, capturing the boy&#x27;s focused expression and the rhythmic movement of his hands on the keys. The background is minimal, with a bed and a plain wall, and the only sound is the keyboard playing.</div>
+<div class='kv'><strong>Audio Prompt:</strong> The sound of the keyboard playing can be heard.</div>
+</div>
+  <div class="row">
+    <h2>0008.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0008_javis.mp4</div>
+        <video src="top_25/0008_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0008_ovi_t2v.mp4</div>
+        <video src="top_25/0008_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0008_universe_i2v.mp4</div>
+        <video src="top_25/0008_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0008_ovi_i2v.mp4</div>
+        <video src="top_25/0008_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0009.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video features a man with curly hair and glasses, surrounded by a variety of colorful flowers. He is speaking, expressing his determination not to forsake his professor and his willingness to face a problem he must eventually deal with. The scene is filled with vibrant flowers, creating a visually rich and dynamic environment.</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the man</em>: I won&#x27;t forsake my professor, nor do I intend to run from a problem that I must face sooner or later. Give me one night to make my decision.</div>
+</div>
+  <div class="row">
+    <h2>0009.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0009_javis.mp4</div>
+        <video src="top_25/0009_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0009_ovi_t2v.mp4</div>
+        <video src="top_25/0009_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0009_universe_i2v.mp4</div>
+        <video src="top_25/0009_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0009_ovi_i2v.mp4</div>
+        <video src="top_25/0009_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0012.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video begins with a close-up shot of a boy reading a book at the beach. The background features a serene ocean with a beautiful sunset. The boy, wearing a black t-shirt, is initially focused on his reading. As the video progresses, he raises his head and looks at the camera, speaking to the audience. The ambient sounds of the tide and waves add to the peaceful atmosphere of the scene.</div>
+<div class='kv'><strong>Audio Prompt:</strong> The sound of the tide., The sound of the waves.</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the boy</em>: Reading is easy. Thinking is difficult. Both of them are important.</div>
+</div>
+  <div class="row">
+    <h2>0012.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0012_javis.mp4</div>
+        <video src="top_25/0012_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0012_ovi_t2v.mp4</div>
+        <video src="top_25/0012_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0012_universe_i2v.mp4</div>
+        <video src="top_25/0012_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0012_ovi_i2v.mp4</div>
+        <video src="top_25/0012_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0013.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> A tranquil scene of a girl sitting by the sea, quietly enjoying the soothing sounds of the waves and the rocks. The video captures the serene atmosphere of the coastal environment, with the gentle movement of the waves and the girl&#x27;s stillness creating a peaceful and reflective mood.</div>
+<div class='kv'><strong>Audio Prompt:</strong> The sound of waves hitting the rocks</div>
+</div>
+  <div class="row">
+    <h2>0013.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0013_javis.mp4</div>
+        <video src="top_25/0013_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0013_ovi_t2v.mp4</div>
+        <video src="top_25/0013_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0013_universe_i2v.mp4</div>
+        <video src="top_25/0013_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0013_ovi_i2v.mp4</div>
+        <video src="top_25/0013_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0014.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video features a woman playing the guitar in a cozy, well-lit room. She is dressed casually in a denim jacket and skirt, and her long, wavy brown hair frames her face. The background includes string lights and two guitars mounted on the wall, adding to the intimate and relaxed setting. The woman&#x27;s gentle smile and the soft sound of the guitar create a warm and inviting atmosphere.</div>
+<div class='kv'><strong>Audio Prompt:</strong> The sound of the guitar playing</div>
+</div>
+  <div class="row">
+    <h2>0014.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0014_javis.mp4</div>
+        <video src="top_25/0014_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0014_ovi_t2v.mp4</div>
+        <video src="top_25/0014_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0014_universe_i2v.mp4</div>
+        <video src="top_25/0014_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0014_ovi_i2v.mp4</div>
+        <video src="top_25/0014_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0017.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video captures a moment of celebration and disbelief as a woman in a graduation cap and gown expresses her excitement about graduating from Harvard University. The setting is simple and clean, focusing entirely on the woman&#x27;s emotional reaction.</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the woman</em>: I can&#x27;t beleave, I graduated from Harvard. O, I must be dreaming.</div>
+</div>
+  <div class="row">
+    <h2>0017.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0017_javis.mp4</div>
+        <video src="top_25/0017_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0017_ovi_t2v.mp4</div>
+        <video src="top_25/0017_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0017_universe_i2v.mp4</div>
+        <video src="top_25/0017_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0017_ovi_i2v.mp4</div>
+        <video src="top_25/0017_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0030.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> A woman in a lemon print dress is playing the piano in a bright room with a large window. She is singing along with the music, her hands moving gracefully across the keys. The room is well-lit, and the sound of the piano fills the space.</div>
+<div class='kv'><strong>Audio Prompt:</strong> The sound of a piano</div>
+</div>
+  <div class="row">
+    <h2>0030.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0030_javis.mp4</div>
+        <video src="top_25/0030_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0030_ovi_t2v.mp4</div>
+        <video src="top_25/0030_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0030_universe_i2v.mp4</div>
+        <video src="top_25/0030_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0030_ovi_i2v.mp4</div>
+        <video src="top_25/0030_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0039.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video features a woman in a cozy, well-decorated room, speaking directly to the camera with enthusiasm. She is wearing a casual outfit and has a microphone attached to her chest, suggesting she is recording a vlog or tutorial. The background includes plants, a lamp, and artwork, adding to the warm and inviting atmosphere of the scene.</div>
+<div class='kv'><strong>Audio Prompt:</strong> No specific ambient sounds mentioned</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the woman</em>: Hello guys. Welcome back to my channel. I know a lot of you have tried much watch a movie in english without subtitles</div>
+</div>
+  <div class="row">
+    <h2>0039.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0039_javis.mp4</div>
+        <video src="top_25/0039_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0039_ovi_t2v.mp4</div>
+        <video src="top_25/0039_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0039_universe_i2v.mp4</div>
+        <video src="top_25/0039_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0039_ovi_i2v.mp4</div>
+        <video src="top_25/0039_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0055.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video shows a man standing indoors, holding a smartphone and looking at the screen with a slight smile. The background includes a wall with peeling paint and a window with a metal frame. The man is wearing a green t-shirt with the text &#x27;Ride the Waves&#x27; and &#x27;The Ultimate Wave Challenge for Surfer Rider&#x27; printed on it. The speech content suggests that the man is reacting to something humorous or outrageous on the smartphone screen.</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the man</em>: This guy makes me laugh to death, he is truly a idiot. I have never seen such an outrageous operation.</div>
+</div>
+  <div class="row">
+    <h2>0055.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0055_javis.mp4</div>
+        <video src="top_25/0055_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0055_ovi_t2v.mp4</div>
+        <video src="top_25/0055_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0055_universe_i2v.mp4</div>
+        <video src="top_25/0055_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0055_ovi_i2v.mp4</div>
+        <video src="top_25/0055_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0069.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> A man with curly hair and a beard is sitting on a couch, playing an acoustic guitar. He is focused on his performance, strumming the guitar with his right hand while holding the neck with his left hand. The setting is a cozy indoor space with a table in the background that has books and a cup on it. The ambient sound is the sound of the guitar being played.</div>
+<div class='kv'><strong>Audio Prompt:</strong> Sound of guitar</div>
+</div>
+  <div class="row">
+    <h2>0069.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0069_javis.mp4</div>
+        <video src="top_25/0069_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0069_ovi_t2v.mp4</div>
+        <video src="top_25/0069_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0069_universe_i2v.mp4</div>
+        <video src="top_25/0069_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0069_ovi_i2v.mp4</div>
+        <video src="top_25/0069_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0070.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video features a man speaking in front of a bookshelf filled with books and a panda poster. He is wearing glasses and a black t-shirt. The setting appears to be an indoor space, possibly a home office or study room. The man is likely delivering a speech or presentation, discussing an article by Professor Feng Yujun about Russia&#x27;s defeat. There is no significant movement or action taking place in the video.</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the man</em>: Recently, Professor Feng Yujun, an expert on Russian issues at Peking University, published an article in the famous British magazine The Economist saying that Russia&#x27;s defeat is inevitable.</div>
+</div>
+  <div class="row">
+    <h2>0070.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0070_javis.mp4</div>
+        <video src="top_25/0070_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0070_ovi_t2v.mp4</div>
+        <video src="top_25/0070_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0070_universe_i2v.mp4</div>
+        <video src="top_25/0070_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0070_ovi_i2v.mp4</div>
+        <video src="top_25/0070_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0078.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video features a mystical spirit woman in a dense, enchanted forest. She has an ethereal and serene expression, with long dark hair adorned with green leaves. Her eyes glow with a mystical light as she speaks, her words hinting at strength and resolve. The background is filled with glowing blue flowers and ethereal light filtering through the trees, creating a serene and magical atmosphere. The scene remains static, with the gentle rustling of leaves and the glowing blue flowers adding to the mystical ambiance.</div>
+<div class='kv'><strong>Audio Prompt:</strong> Gentle rustling of leaves, Glowing blue flowers gently swaying</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the woman</em>: You look at me and see only steel, don&#x27;t you? Armor, blade, unyielding resolve.</div>
+</div>
+  <div class="row">
+    <h2>0078.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0078_javis.mp4</div>
+        <video src="top_25/0078_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0078_ovi_t2v.mp4</div>
+        <video src="top_25/0078_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0078_universe_i2v.mp4</div>
+        <video src="top_25/0078_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0078_ovi_i2v.mp4</div>
+        <video src="top_25/0078_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0088.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> In a cyberpunk world, a motorcyclist speeds past a passing car on a city street illuminated by neon lights and towering buildings. The motorcyclist, wearing a futuristic helmet and black suit, rides a sleek, glowing motorcycle. The scene captures the essence of a high-tech, fast-paced urban environment with the sound of the motorcycle and city noise adding to the immersive experience.</div>
+<div class='kv'><strong>Audio Prompt:</strong> Sound of motorcycle, City noise</div>
+</div>
+  <div class="row">
+    <h2>0088.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0088_javis.mp4</div>
+        <video src="top_25/0088_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0088_ovi_t2v.mp4</div>
+        <video src="top_25/0088_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0088_universe_i2v.mp4</div>
+        <video src="top_25/0088_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0088_ovi_i2v.mp4</div>
+        <video src="top_25/0088_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0103.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> In a modern studio setting, an e-commerce anchor is live streaming and selling makeup products. She is seated at a table filled with various makeup items, pointing at a lipstick in shade 95 and explaining its features. The background includes a large screen displaying live chat messages and a clean, organized makeup table. The overall style is realistic, with a focus on the anchor&#x27;s interaction with the products and the camera interface.</div>
+<div class='kv'><strong>Audio Prompt:</strong> Ambient studio sounds, occasional clicks from the camera interface</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the girl</em>: Today we are going to try the lipstick in shade 95.</div>
+</div>
+  <div class="row">
+    <h2>0103.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0103_javis.mp4</div>
+        <video src="top_25/0103_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0103_ovi_t2v.mp4</div>
+        <video src="top_25/0103_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0103_universe_i2v.mp4</div>
+        <video src="top_25/0103_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0103_ovi_i2v.mp4</div>
+        <video src="top_25/0103_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0113.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> In this cartoon video, a kale man with a surprised expression is speaking to the viewer. He is surrounded by a lush garden with various green plants and a blurred background of trees and foliage. The kale man is gesturing with his hands while speaking, emphasizing his message about the importance of eating more vegetables. The overall style of the video is whimsical and engaging, with a focus on the character&#x27;s expressive face and body language.</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the cabbage</em>: Oh, how did you find me? Although it is a bit inappropriate, for the sake of your health, I hope you remember to eat more vegetables.</div>
+</div>
+  <div class="row">
+    <h2>0113.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0113_javis.mp4</div>
+        <video src="top_25/0113_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0113_ovi_t2v.mp4</div>
+        <video src="top_25/0113_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0113_universe_i2v.mp4</div>
+        <video src="top_25/0113_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0113_ovi_i2v.mp4</div>
+        <video src="top_25/0113_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0124.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> A serene and contemplative scene of a girl in traditional attire reading a book by a window, with a peaceful and reflective atmosphere</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the girl</em>: If life were always like our first meeting, why would the autumn wind paint the fan with sadness?</div>
+</div>
+  <div class="row">
+    <h2>0124.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0124_javis.mp4</div>
+        <video src="top_25/0124_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0124_ovi_t2v.mp4</div>
+        <video src="top_25/0124_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0124_universe_i2v.mp4</div>
+        <video src="top_25/0124_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0124_ovi_i2v.mp4</div>
+        <video src="top_25/0124_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0129.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video depicts a woman dressed in traditional Chinese attire, wearing an ornate headdress adorned with flowers and jewels. She is speaking, expressing sadness. The background is a blurred indoor setting with traditional Chinese architectural elements. The woman&#x27;s facial expression and body language convey a sense of sorrow and resignation.</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the girl</em>: No, I cannot finish it.</div>
+</div>
+  <div class="row">
+    <h2>0129.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0129_javis.mp4</div>
+        <video src="top_25/0129_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0129_ovi_t2v.mp4</div>
+        <video src="top_25/0129_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0129_universe_i2v.mp4</div>
+        <video src="top_25/0129_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0129_ovi_i2v.mp4</div>
+        <video src="top_25/0129_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0159.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video depicts a man swimming in a calm river. The man has short, dark hair and is partially submerged in the water, with his upper body visible above the surface. The river water is clear, with gentle ripples and reflections of the surrounding environment. The ambient sound of water splashing adds to the serene atmosphere of the scene.</div>
+<div class='kv'><strong>Audio Prompt:</strong> Sound of water splashing</div>
+</div>
+  <div class="row">
+    <h2>0159.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0159_javis.mp4</div>
+        <video src="top_25/0159_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0159_ovi_t2v.mp4</div>
+        <video src="top_25/0159_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0159_universe_i2v.mp4</div>
+        <video src="top_25/0159_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0159_ovi_i2v.mp4</div>
+        <video src="top_25/0159_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0225.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video depicts a realistic and intense scene of a Tyrannosaurus Rex roaring and running towards the camera in a dense, prehistoric forest. The dinosaur&#x27;s fierce expression and the surrounding lush forest create a sense of danger and excitement. The camera remains stationary, allowing the viewer to fully appreciate the dinosaur&#x27;s movement and the detailed environment. The ambient sounds of dinosaurs roaring and the ground shaking add to the immersive experience, making the viewer feel as if they are in the midst of a prehistoric scene.</div>
+<div class='kv'><strong>Audio Prompt:</strong> The sound of dinosaurs roaring, the ground shaking, and the rustling of leaves</div>
+</div>
+  <div class="row">
+    <h2>0225.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0225_javis.mp4</div>
+        <video src="top_25/0225_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0225_ovi_t2v.mp4</div>
+        <video src="top_25/0225_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0225_universe_i2v.mp4</div>
+        <video src="top_25/0225_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0225_ovi_i2v.mp4</div>
+        <video src="top_25/0225_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0259.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video depicts a man in a professional setting, engaged in a serious phone conversation. He is dressed in a gray suit and white shirt, holding a telephone receiver and a pen, suggesting he is in the middle of a business discussion. The background is a simple office environment, with a blurred figure in the background, adding to the professional atmosphere. The man&#x27;s facial expression and body language convey determination and focus, emphasizing the importance of the conversation he is having.</div>
+<div class='kv'><strong>Audio Prompt:</strong> The sound of a telephone ringing in the background</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the man</em>: This time we must get this order, no matter what the cost.</div>
+</div>
+  <div class="row">
+    <h2>0259.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0259_javis.mp4</div>
+        <video src="top_25/0259_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0259_ovi_t2v.mp4</div>
+        <video src="top_25/0259_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0259_universe_i2v.mp4</div>
+        <video src="top_25/0259_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0259_ovi_i2v.mp4</div>
+        <video src="top_25/0259_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0266.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video features a man sitting on a chair, wearing a black turtleneck sweater and glasses. He raises his left hand to show a watch on his wrist while speaking to the camera. The background is a plain, light gray wall, and there is no ambient sound described.</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the man</em>: A man can be without a home, but he cannot be without money.</div>
+</div>
+  <div class="row">
+    <h2>0266.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0266_javis.mp4</div>
+        <video src="top_25/0266_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0266_ovi_t2v.mp4</div>
+        <video src="top_25/0266_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0266_universe_i2v.mp4</div>
+        <video src="top_25/0266_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0266_ovi_i2v.mp4</div>
+        <video src="top_25/0266_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0277.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> A young man is sitting on a step, playing a guitar and singing. He is wearing a gray t-shirt and dark pants with red sneakers. The background features a yellow wall with peeling paint and a window. The camera remains stationary, focusing on the young man and his guitar. The ambient sound is the sound of the guitar and singing.</div>
+<div class='kv'><strong>Audio Prompt:</strong> Guitar music and singing</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the man</em>: When I was young, I&#x27;d listen to the radio Waitin&#x27; for my favorite songs</div>
+</div>
+  <div class="row">
+    <h2>0277.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0277_javis.mp4</div>
+        <video src="top_25/0277_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0277_ovi_t2v.mp4</div>
+        <video src="top_25/0277_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0277_universe_i2v.mp4</div>
+        <video src="top_25/0277_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0277_ovi_i2v.mp4</div>
+        <video src="top_25/0277_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0286.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> The video features a woman standing in front of a bookshelf filled with old books, holding a vintage Polaroid camera. She is speaking directly to the camera, saying &#x27;Look at me.&#x27; The scene is static, with no significant movement or action taking place. The background is a warm and inviting indoor setting, with soft natural lighting. The woman is wearing a sleeveless dress with a floral pattern and has short, curly black hair. The camera is focused on her upper body and face, capturing her as she prepares to take a photo.</div>
+<div class='kv'><strong>Audio Prompt:</strong> Camera photo sound</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the woman</em>: Look at me.</div>
+</div>
+  <div class="row">
+    <h2>0286.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0286_javis.mp4</div>
+        <video src="top_25/0286_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0286_ovi_t2v.mp4</div>
+        <video src="top_25/0286_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0286_universe_i2v.mp4</div>
+        <video src="top_25/0286_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0286_ovi_i2v.mp4</div>
+        <video src="top_25/0286_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0292.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> An old man is kneeling on the ground, holding some money in his hands, and speaking. He is wearing a beige jacket, a red sweater, and brown pants. He has a backpack on his back. The background is a gray stone wall and a paved sidewalk. The ambient sound is the ambient city sounds.</div>
+<div class='kv'><strong>Audio Prompt:</strong> Ambient city sounds</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the old man</em>: Please help me, I only need 100 yuan for a ride home. Please help me.</div>
+</div>
+  <div class="row">
+    <h2>0292.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0292_javis.mp4</div>
+        <video src="top_25/0292_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0292_ovi_t2v.mp4</div>
+        <video src="top_25/0292_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0292_universe_i2v.mp4</div>
+        <video src="top_25/0292_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0292_ovi_i2v.mp4</div>
+        <video src="top_25/0292_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+<div class='prompt'>
+<h3>0295.json — Prompt</h3>
+<div class='kv'><strong>Video Prompt:</strong> A man in a beige work uniform and white gloves is seen repairing an electrical panel. He is using a tool and appears to be explaining the process to the camera. The background is a plain white wall with a wooden door frame. The man speaks to the camera, saying &#x27;No problem. It works now.&#x27;</div>
+<div class='kv'><strong>Speech Prompt:</strong> <em>the man</em>: No problem. It works now.</div>
+</div>
+  <div class="row">
+    <h2>0295.json — T2V: javis vs ovi_t2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0295_javis.mp4</div>
+        <video src="top_25/0295_javis.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0295_ovi_t2v.mp4</div>
+        <video src="top_25/0295_ovi_t2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h2>I2V: universe_i2v vs ovi_i2v</h2>
+    <div class="pair">
+      <div class="card">
+        <h3>Left</h3>
+        <div class="filename">0295_universe_i2v.mp4</div>
+        <video src="top_25/0295_universe_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="card">
+        <h3>Right</h3>
+        <div class="filename">0295_ovi_i2v.mp4</div>
+        <video src="top_25/0295_ovi_i2v.mp4" controls preload="metadata" playsinline></video>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>Relative paths are used; place this HTML alongside <code>top_25/</code> (videos) and <code>set_1/</code> (JSONs). Works locally and on GitHub Pages.</div>
+</div>
+
+</body></html>

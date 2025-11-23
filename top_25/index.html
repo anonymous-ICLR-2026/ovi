@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'/>
+<title>Compare Models (2-wide rows)</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; color:#222; }
+h1 { margin: 0 0 12px 0; font-size: 24px; }
+.header { border: 1px solid #e7e7e7; border-radius: 12px; padding: 16px; background: #fbfbfb; margin-bottom: 20px; }
+.header h2 { margin: 0 0 10px 0; font-size: 18px; }
+.header ol { margin: 8px 0 0 20px; }
+.header li { margin: 6px 0; line-height: 1.4; }
+.header .sublist { margin-top: 6px; }
+.header .note { margin-top: 10px; font-size: 12px; color: #555; }
+.legend { display:flex; gap:12px; margin: 10px 0 18px 0; font-size: 12px; color:#444;}
+.badge { padding: 4px 10px; border-radius: 999px; border: 1px solid #e0e0e0; background: #fff; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 22px; }
+.row { border: 1px solid #e7e7e7; border-radius: 12px; padding: 16px; background: #fafafa; }
+.row h2 { margin: 0 0 12px 0; font-size: 16px; font-weight: 700; color: #333; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: 14px; margin-bottom: 12px; }
+.card { background: white; border: 1px solid #e7e7e7; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.card h3 { margin: 0; font-size: 14px; font-weight: 700; color: #111; letter-spacing: .2px; }
+.card .filename { font-size: 12px; color: #666; word-break: break-all; }
+.card video { width: 100%; height: auto; background: #000; border-radius: 8px; }
+.missing { display: grid; place-items: center; width: 100%; aspect-ratio: 16/9; background: #f0f0f0; color: #888; border-radius: 8px; font-size: 12px; border: 1px dashed #d0d0d0; }
+.footer { margin-top: 24px; font-size: 12px; color: #666; }
+@media (min-width: 1200px) {
+  .pair { grid-template-columns: repeat(2, minmax(420px, 1fr)); }
+}
+</style></head><body>
+
+<div class="header">
+  <h1>Side by side comparison between Ovi and Javis, Universe-1 using Verse-Bench set 1 with total 205 evaluation prompts with ref images (random 25 for display here)</h1>
+  <h2>Protocol & Viewing Guide</h2>
+  <ol>
+    <li><strong>Modality matching for fair comparison on both Javis and Universe-1.</strong> We evaluate text-to-video (T2V) baselines by comparing <code>javis</code> (T2V) with <code>ovi_t2v</code>. We evaluate image-to-video (I2V) baselines by comparing <code>universe_i2v</code> (I2V) with <code>ovi_i2v</code>. Each comparison matches the single modality supported by the respective baseline.</li>
+    <li><strong>Organization of examples.</strong> Each four-video group corresponds to a single prompt identifier. For each identifier, two rows are shown:
+      <div class="legend" style="margin:8px 0 0 0;">
+        <span class="badge">Row 1: <code>javis</code> vs <code>ovi_t2v</code> (T2V)</span>
+        <span class="badge">Row 2: <code>universe_i2v</code> vs <code>ovi_i2v</code> (I2V)</span>
+      </div>
+    </li>
+    <li><strong>Prompt formatting.</strong> For I2V comparisons, we use the original JSON prompt format aligned with the <code>universe_i2v</code> model requirements. For T2V comparisons, we merge the video and audio fields into a single text prompt as required by the <code>javis</code> interface. The same semantic content is used across systems within each modality.</li>
+    <li><strong>Qualitative evaluation criteria.</strong> Labelers are presented with a random pair of videos each time, and are asked the six questions below in terms of evaluation criteria. Labelers are asked to select one of the three choices as answer to each question - Left is Better, Right is Better or Not Sure.
+      <ol class="sublist" type="a">
+        <li>(Video Quality) Which example gives better overall video quality and structural correctness of human and objects if presented,</li>
+        <li>(Audio Quality) Which example gives better speech, music, and sound generation quality,</li>
+        <li>(Audio-Visual Sync) Which example gives better Lip-sync correctness if speech is involved in the prompt,</li>
+        <li>(Video Quality) Which example gives better temporal consistency across the entire video,</li>
+        <li>(Video Quality) Which example gives larger motion range of the generated video,</li>
+        <li>(video Quality) Which example gives better Prompt-following fidelity.</li>
+      </ol>
+    </li>
+    <li><strong>Summary statement.</strong> Blind voting results from reviewers suggest that <code>ovi</code> performs competitively or favorably on the above criteria with a large margin in both T2V and I2V settings to both Javis and Universe-1 as written in the paper</li>
+  </ol>
+  <div class="note">
+    Each group is labeled with its JSON id (e.g., <code>00000.json</code>) so reviewers can cross-reference the exact prompt used for generation.
+    This page shows a randomly selected subset (up to 25 groups) due to size limits.
+  </div>
+</div>
+
+<div id="count" style="margin: 0 0 12px 0; font-size:13px; color:#555;'></div>
+<div class="grid" id="grid"></div>
+
+<script>
+const LABELS = {
+  javis:        "Javis (T2V)",
+  ovi_t2v:      "Ovi (T2V)",
+  universe_i2v: "Universe-1 (I2V)",
+  ovi_i2v:      "Ovi (I2V)",
+};
+
+// Inline manifest generated by Python:
+const MANIFEST =
+{"dir":"top_25","items":[{"id":"0008","javis":"0008_javis.mp4","ovi_t2v":"0008_ovi_t2v.mp4","ovi_i2v":"0008_ovi_i2v.mp4","universe_i2v":"0008_universe_i2v.mp4"},{"id":"0009","ovi_i2v":"0009_ovi_i2v.mp4","ovi_t2v":"0009_ovi_t2v.mp4","javis":"0009_javis.mp4","universe_i2v":"0009_universe_i2v.mp4"},{"id":"0012","javis":"0012_javis.mp4","universe_i2v":"0012_universe_i2v.mp4","ovi_t2v":"0012_ovi_t2v.mp4","ovi_i2v":"0012_ovi_i2v.mp4"},{"id":"0013","ovi_i2v":"0013_ovi_i2v.mp4","ovi_t2v":"0013_ovi_t2v.mp4","universe_i2v":"0013_universe_i2v.mp4","javis":"0013_javis.mp4"},{"id":"0014","universe_i2v":"0014_universe_i2v.mp4","javis":"0014_javis.mp4","ovi_t2v":"0014_ovi_t2v.mp4","ovi_i2v":"0014_ovi_i2v.mp4"},{"id":"0017","javis":"0017_javis.mp4","universe_i2v":"0017_universe_i2v.mp4","ovi_i2v":"0017_ovi_i2v.mp4","ovi_t2v":"0017_ovi_t2v.mp4"},{"id":"0030","universe_i2v":"0030_universe_i2v.mp4","javis":"0030_javis.mp4","ovi_i2v":"0030_ovi_i2v.mp4","ovi_t2v":"0030_ovi_t2v.mp4"},{"id":"0039","universe_i2v":"0039_universe_i2v.mp4","ovi_i2v":"0039_ovi_i2v.mp4","javis":"0039_javis.mp4","ovi_t2v":"0039_ovi_t2v.mp4"},{"id":"0055","universe_i2v":"0055_universe_i2v.mp4","javis":"0055_javis.mp4","ovi_i2v":"0055_ovi_i2v.mp4","ovi_t2v":"0055_ovi_t2v.mp4"},{"id":"0069","ovi_t2v":"0069_ovi_t2v.mp4","ovi_i2v":"0069_ovi_i2v.mp4","universe_i2v":"0069_universe_i2v.mp4","javis":"0069_javis.mp4"},{"id":"0070","ovi_i2v":"0070_ovi_i2v.mp4","universe_i2v":"0070_universe_i2v.mp4","ovi_t2v":"0070_ovi_t2v.mp4","javis":"0070_javis.mp4"},{"id":"0078","javis":"0078_javis.mp4","ovi_t2v":"0078_ovi_t2v.mp4","ovi_i2v":"0078_ovi_i2v.mp4","universe_i2v":"0078_universe_i2v.mp4"},{"id":"0088","ovi_t2v":"0088_ovi_t2v.mp4","ovi_i2v":"0088_ovi_i2v.mp4","javis":"0088_javis.mp4","universe_i2v":"0088_universe_i2v.mp4"},{"id":"0103","universe_i2v":"0103_universe_i2v.mp4","ovi_i2v":"0103_ovi_i2v.mp4","ovi_t2v":"0103_ovi_t2v.mp4","javis":"0103_javis.mp4"},{"id":"0113","javis":"0113_javis.mp4","universe_i2v":"0113_universe_i2v.mp4","ovi_t2v":"0113_ovi_t2v.mp4","ovi_i2v":"0113_ovi_i2v.mp4"},{"id":"0124","ovi_i2v":"0124_ovi_i2v.mp4","ovi_t2v":"0124_ovi_t2v.mp4","javis":"0124_javis.mp4","universe_i2v":"0124_universe_i2v.mp4"},{"id":"0129","ovi_i2v":"0129_ovi_i2v.mp4","ovi_t2v":"0129_ovi_t2v.mp4","universe_i2v":"0129_universe_i2v.mp4","javis":"0129_javis.mp4"},{"id":"0159","ovi_i2v":"0159_ovi_i2v.mp4","universe_i2v":"0159_universe_i2v.mp4","ovi_t2v":"0159_ovi_t2v.mp4","javis":"0159_javis.mp4"},{"id":"0225","ovi_i2v":"0225_ovi_i2v.mp4","ovi_t2v":"0225_ovi_t2v.mp4","universe_i2v":"0225_universe_i2v.mp4","javis":"0225_javis.mp4"},{"id":"0259","ovi_t2v":"0259_ovi_t2v.mp4","universe_i2v":"0259_universe_i2v.mp4","ovi_i2v":"0259_ovi_i2v.mp4","javis":"0259_javis.mp4"},{"id":"0266","universe_i2v":"0266_universe_i2v.mp4","ovi_t2v":"0266_ovi_t2v.mp4","ovi_i2v":"0266_ovi_i2v.mp4","javis":"0266_javis.mp4"},{"id":"0277","universe_i2v":"0277_universe_i2v.mp4","ovi_t2v":"0277_ovi_t2v.mp4","ovi_i2v":"0277_ovi_i2v.mp4","javis":"0277_javis.mp4"},{"id":"0286","ovi_i2v":"0286_ovi_i2v.mp4","ovi_t2v":"0286_ovi_t2v.mp4","javis":"0286_javis.mp4","universe_i2v":"0286_universe_i2v.mp4"},{"id":"0292","javis":"0292_javis.mp4","ovi_t2v":"0292_ovi_t2v.mp4","ovi_i2v":"0292_ovi_i2v.mp4","universe_i2v":"0292_universe_i2v.mp4"},{"id":"0295","javis":"0295_javis.mp4","universe_i2v":"0295_universe_i2v.mp4","ovi_i2v":"0295_ovi_i2v.mp4","ovi_t2v":"0295_ovi_t2v.mp4"}]};
+
+function card(title, filename, src) {
+  const wrap = document.createElement('div');
+  wrap.className = 'card';
+  const h3 = document.createElement('h3');
+  h3.textContent = title;
+  wrap.appendChild(h3);
+
+  if (src) {
+    const v = document.createElement('video');
+    v.src = src;
+    v.controls = true;
+    v.playsInline = true;
+    v.preload = 'metadata';
+    wrap.appendChild(v);
+    const fn = document.createElement('div');
+    fn.className = 'filename';
+    fn.textContent = filename;
+    wrap.appendChild(fn);
+  } else {
+    const miss = document.createElement('div');
+    miss.className = 'missing';
+    miss.textContent = 'Missing';
+    wrap.appendChild(miss);
+    const fn = document.createElement('div');
+    fn.className = 'filename';
+    fn.textContent = filename || '(not found)';
+    wrap.appendChild(fn);
+  }
+  return wrap;
+}
+
+function rowTitle(id, subtitle) {
+  const h = document.createElement('h2');
+  h.textContent = `${id}.json — ${subtitle}`;
+  return h;
+}
+
+function render(manifest, maxGroups=25) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const items = [...manifest.items].sort((a,b)=>a.id.localeCompare(b.id)).slice(0, maxGroups);
+  const count = document.getElementById('count');
+  count.textContent = `Showing ${items.length} group(s) from ${manifest.items.length} available.`;
+
+  for (const it of items) {
+    const group = document.createElement('div');
+    group.className = 'row';
+
+    // Row 1: Javis vs Ovi (T2V)
+    group.appendChild(rowTitle(it.id, 'T2V: javis vs ovi_t2v'));
+    const pair1 = document.createElement('div');
+    pair1.className = 'pair';
+    const fJ = it.javis || null;
+    const fOT = it.ovi_t2v || null;
+    pair1.appendChild(card(LABELS.javis, fJ || '', fJ ? `${manifest.dir}/${fJ}` : null));
+    pair1.appendChild(card(LABELS.ovi_t2v, fOT || '', fOT ? `${manifest.dir}/${fOT}` : null));
+    group.appendChild(pair1);
+
+    // Row 2: Universe-1 vs Ovi (I2V)
+    group.appendChild(rowTitle(it.id, 'I2V: universe_i2v vs ovi_i2v'));
+    const pair2 = document.createElement('div');
+    pair2.className = 'pair';
+    const fU = it.universe_i2v || null;
+    const fOI = it.ovi_i2v || null;
+    pair2.appendChild(card(LABELS.universe_i2v, fU || '', fU ? `${manifest.dir}/${fU}` : null));
+    pair2.appendChild(card(LABELS.ovi_i2v, fOI || '', fOI ? `${manifest.dir}/${fOI}` : null));
+    group.appendChild(pair2);
+
+    grid.appendChild(group);
+  }
+}
+
+render(MANIFEST, 25);
+</script>
+</body></html>
